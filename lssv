@@ -1,0 +1,48 @@
+#!/usr/local/bin/python3
+
+class Host:
+    def __init__(self, Host):
+        self.HostName = "             "
+        self.Host = Host.split()[1]
+        self.Port = "22"
+        self.ServerAliveInterval = "            "
+        self.User = ""
+    def processLine(self, line):
+        if line[0:5] == "Host ":
+            self.Host = line.split()[1]
+        elif line.split()[0] == "HostName":
+            self.HostName = line.split()[1]
+        elif line.split()[0] == "Port":
+            self.Port = line.split()[1]
+        elif line.split()[0] == 'User':
+            self.User = line.split()[1]
+        elif line.split()[0] == "ServerAliveInterval":
+            self.ServerAliveInterval = line.split()[1]
+    def print(self):
+        data = [self.Host, self.HostName, self.Port, self.User]
+        data[3] += "\t|"
+        for i in range(len(data)):
+            data[i] = "|" + data[i]
+            if len(data[i]) > 15:
+                data[i] = data[i][:12] + "..."
+            elif len(data[i]) < 8:
+                data[i] += "\t"
+        data[2] = data[2][:-1]
+        print(*data, sep='\t')
+
+sshConfigFilePath = "/Users/akbar30bill/.ssh/config"
+sshConfigFile = open(sshConfigFilePath, 'r')
+sshConfigData = sshConfigFile.read().rstrip()
+sshConfigLines = sshConfigData.split('\n')
+allHosts = []
+for line in sshConfigLines:
+    if line[0:5] == "Host ":
+        allHosts.append(Host(line))
+    else:
+        allHosts[-1].processLine(line)
+print("-------------------------------------------------")
+print("|Host\t\t|HostName\t|Port\t|User\t|")
+print("-------------------------------------------------")
+for Host in allHosts:
+    Host.print()
+print("-------------------------------------------------")
