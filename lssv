@@ -1,5 +1,6 @@
-#!/usr/local/bin/python3
-
+#!/usr/bin/python3
+from os.path import expanduser
+home = expanduser("~")
 class Host:
     def __init__(self, Host):
         self.HostName = "             "
@@ -30,7 +31,7 @@ class Host:
         data[2] = data[2][:-1]
         print(*data, sep='\t')
 
-sshConfigFilePath = "/Users/akbar30bill/.ssh/config"
+sshConfigFilePath = home + "/.ssh/config"
 sshConfigFile = open(sshConfigFilePath, 'r')
 sshConfigData = sshConfigFile.read().rstrip()
 sshConfigLines = sshConfigData.split('\n')
